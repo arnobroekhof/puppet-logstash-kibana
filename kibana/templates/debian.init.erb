@@ -1,0 +1,41 @@
+#!/bin/sh
+
+set -e
+
+# Must be a valid filename
+NAME=kibana
+#/var/run/app must be writable by your user
+PIDFILE=<%= scope.lookupvar('kibana::kibana_directory') %>/kibana.pid
+#This is the command to be run, give the full pathname
+DAEMON_START="<%= scope.lookupvar('kibana::kibana_directory') %>/kibana-start"
+DAEMON_STOP="<%= scope.lookupvar('kibana::kibana_directory') %>/kibana-stop"
+#create a config yml with daemonization options in it - and the same PIDFILE path as above
+USER=<%= scope.lookupvar('kibana::kibana_user') %>
+APPDIR=<%= scope.lookupvar('kibana::kibana_directory') %>
+
+export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
+
+case "$1" in
+  start)
+        echo -n "Starting daemon: "$NAME
+	start-stop-daemon --start --chdir $APPDIR --quiet --chuid $USER --pidfile $PIDFILE --exec $DAEMON_START 
+        echo "."
+	;;
+  stop)
+        echo -n "Stopping daemon: "$NAME
+	$DAEMON_STOP
+        echo "."
+	;;
+  restart)
+        echo -n "Restarting daemon: "$NAME
+	$DAEMON_STOP
+	start-stop-daemon --start --chdir $APPDIR --quiet --chuid $USER --pidfile $PIDFILE --exec $DAEMON 
+	echo "."
+	;;
+
+  *)
+	echo "Usage: "$1" {start|stop|restart}"
+	exit 1
+esac
+
+exit 0

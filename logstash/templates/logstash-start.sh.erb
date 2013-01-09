@@ -1,0 +1,4 @@
+#!/bin/sh
+export LOGSTASH_JAVA_OPTS="-server -Xmx512m -Xms512m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:NewRatio=2 -XX:+DisableExplicitGC -Dhk2.file.directory.changeIntervalTimer=6000 -Xss2048k -XX:ParallelGCThreads=4 -XX:+AggressiveHeap"
+java ${LOGSTASH_JAVA_OPTS} -jar  <%= scope.lookupvar('logstash::logstash_directory') %>/logstash.jar agent -f <%= scope.lookupvar('logstash::logstash_directory') %>/<%= scope.lookupvar('logstash::logstash_config_file') %> > /dev/null &
+exit 0
