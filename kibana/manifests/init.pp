@@ -67,7 +67,7 @@ class kibana (
 	cwd => $kibana::kibana_directory,
 	unless => "bundle show kibana | grep kibana",
 	require => Exec['git-clone-kibana'],
-        path    => ["/bin", "$kibana::gem_bin_path" , "/usr/sbin"],
+        path    => ["/usr/bin", "/sbin", "/bin", "$kibana::gem_bin_path" , "/usr/sbin"],
   }
   file { 'kibana-init-script':
         name => "/etc/init.d/kibana",
