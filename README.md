@@ -19,3 +19,8 @@ node "node-name" {
 }
 
 
+configure rsyslog on the hosts
+
+*.* @@<ipaddress>:5000
+
+
